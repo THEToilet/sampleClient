@@ -2,11 +2,20 @@ package jp.ac.shibaura.it.ie.controllers;
 
 import jp.ac.shibaura.it.ie.log.LogUtils;
 import jp.ac.shibaura.it.ie.usecase.auth.AuthInterface;
+import jp.ac.shibaura.it.ie.usecase.auth.entry.AuthEntryRequestMessage;
+import jp.ac.shibaura.it.ie.usecase.auth.login.AuthLoginRequestMessage;
+import jp.ac.shibaura.it.ie.usecase.auth.login.AuthLoginResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
 
 @Component
 public class AuthController implements AuthInterface {
@@ -18,50 +27,58 @@ public class AuthController implements AuthInterface {
     private LogUtils logger;
 
     @Override
-    public boolean authLogin() {
+    public Optional<String> authLogin(AuthLoginRequestMessage authLoginRequestMessage) {
+        String URL = "http://localhost:8000/logout";
+        String session = null;
         try {
-            return restTemplate.getForObject(URL, TestResponseResource.class);
-        }
-        catch (HttpClientErrorException e) { // (1)
+            ResponseEntity<AuthLoginResponseMessage> responseEntity = restTemplate.postForEntity(URL, authLoginRequestMessage, AuthLoginResponseMessage.class);
+            logger.info(responseEntity.toString());
+            session = responseEntity.getBody().getSession();
+        } catch (HttpClientErrorException e) {
             logger.error("400系エラー発生");
-            throw e;
-        }
-        catch (HttpServerErrorException e) { // (2)
+            e.printStackTrace();
+            return Optional.ofNullable(session);
+        } catch (HttpServerErrorException e) {
             logger.error("500系エラー発生");
-            throw e;
+            e.printStackTrace();
+            return Optional.ofNullable(session);
         }
-        return false;
+        return Optional.ofNullable(session);
     }
 
     @Override
-    public boolean authEntry() {
+    public boolean authEntry(AuthEntryRequestMessage authEntryRequestMessage) {
+        String URL = "http://localhost:8080/entry";
         try {
-            return restTemplate.getForObject(URL, TestResponseResource.class);
-        }
-        catch (HttpClientErrorException e) { // (1)
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL, authEntryRequestMessage, String.class);
+            logger.info(responseEntity.toString());
+        } catch (HttpClientErrorException e) {
             logger.error("400系エラー発生");
-            throw e;
-        }
-        catch (HttpServerErrorException e) { // (2)
+            e.printStackTrace();
+            return false;
+        } catch (HttpServerErrorException e) {
             logger.error("500系エラー発生");
-            throw e;
+            e.printStackTrace();
+            return false;
         }
-        return false;
+        return true;
     }
 
     @Override
-    public boolean authLogout() {
+    public boolean authLogout(String session) {
+        String URL = "http://localhost:8080/logout";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("session", session);
+        HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
         try {
-            return restTemplate.getForObject(URL, TestResponseResource.class);
-        }
-        catch (HttpClientErrorException e) { // (1)
+            ResponseEntity<String> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, httpEntity, String.class);
+        } catch (HttpClientErrorException e) {
             logger.error("400系エラー発生");
-            throw e;
-        }
-        catch (HttpServerErrorException e) { // (2)
+            return false;
+        } catch (HttpServerErrorException e) {
             logger.error("500系エラー発生");
-            throw e;
+            return false;
         }
-        return false;
+        return true;
     }
 }
