@@ -11,12 +11,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
+/**
+ *  認証周りのAPIを叩きます
+ */
 @Component
 public class AuthController implements AuthInterface {
 
@@ -26,9 +30,13 @@ public class AuthController implements AuthInterface {
     @Autowired
     private LogUtils logger;
 
+    /**
+     * @param authLoginRequestMessage ログインするユーザ情報
+     * @return session情報
+     */
     @Override
     public Optional<String> authLogin(AuthLoginRequestMessage authLoginRequestMessage) {
-        String URL = "http://localhost:8000/logout";
+        String URL = "http://localhost:8000/login";
         String session = null;
         try {
             ResponseEntity<AuthLoginResponseMessage> responseEntity = restTemplate.postForEntity(URL, authLoginRequestMessage, AuthLoginResponseMessage.class);
@@ -46,6 +54,10 @@ public class AuthController implements AuthInterface {
         return Optional.ofNullable(session);
     }
 
+    /**
+     * @param authEntryRequestMessage
+     * @return
+     */
     @Override
     public boolean authEntry(AuthEntryRequestMessage authEntryRequestMessage) {
         String URL = "http://localhost:8080/entry";
@@ -64,6 +76,10 @@ public class AuthController implements AuthInterface {
         return true;
     }
 
+    /**
+     * @param session
+     * @return
+     */
     @Override
     public boolean authLogout(String session) {
         String URL = "http://localhost:8080/logout";

@@ -7,15 +7,23 @@ import jp.ac.shibaura.it.ie.usecase.auth.entry.AuthEntryRequestMessage;
 import jp.ac.shibaura.it.ie.usecase.auth.login.AuthLoginRequestMessage;
 import jp.ac.shibaura.it.ie.usecase.category.CategoryInterface;
 import jp.ac.shibaura.it.ie.usecase.chat.ChatInterface;
+import jp.ac.shibaura.it.ie.usecase.chat.message.post.ChatMessagePostRequestMessage;
+import jp.ac.shibaura.it.ie.usecase.chat.stamp.post.ChatStampPostRequestMessage;
 import jp.ac.shibaura.it.ie.usecase.image.ImageInterface;
 import jp.ac.shibaura.it.ie.usecase.room.RoomInterface;
 import jp.ac.shibaura.it.ie.usecase.user.UserInterface;
 import jp.ac.shibaura.it.ie.usecase.user.update.UserUpdateRequestMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
 import java.util.Optional;
 
+@Controller
+@Component
 public class ApiTest {
     @Autowired
     private AuthInterface authInterface;
@@ -34,8 +42,9 @@ public class ApiTest {
 
     /**
      *  APIのテストをしています。
+     * @param context
      */
-    public void start() {
+    public void start(ConfigurableApplicationContext context) throws Exception{
         String session = "";
 
         // ユーザ登録
@@ -61,7 +70,8 @@ public class ApiTest {
         List<Category> categoryList = categoryInterface.categoryList(session);
 
         // 部屋参加
-        String roomId = categoryInterface.categoryJoin(session);
+        Optional<String> roomIdOptional = categoryInterface.categoryJoin(session, categoryId);
+        String roomId = roomIdOptional.get();
 
         // ルーム待機
         roomInterface.roomWait(session, roomId);
@@ -70,13 +80,13 @@ public class ApiTest {
 
 
         // メッセージ（画像）送信
-        chatInterface.chatMessagePost(session, roomId);
+        chatInterface.chatMessagePost(session, roomId, new ChatMessagePostRequestMessage("df","d","df"));
         // メッセージ一覧取得
         chatInterface.chatMessageUpdate(session, roomId);
 
         String massageId = "";
         // スタンプ送信
-        chatInterface.chatStampPost(session, roomId, massageId);
+        chatInterface.chatStampPost(session, roomId, massageId, new ChatStampPostRequestMessage("d", "d"));
         // チャット退出
         chatInterface.chatExit(session, roomId);
 

@@ -9,17 +9,26 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+@Component
 public class ImageController implements ImageInterface {
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
     private LogUtils logger;
+
+    /**
+     * @param session
+     * @param categoryId
+     * @return
+     */
     @Override
     public List<Image> imageList(String session, String categoryId) {
         String URL = "http://localhost:8080/image/list?categoryId=" + categoryId;

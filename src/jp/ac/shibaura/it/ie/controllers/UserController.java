@@ -7,16 +7,24 @@ import jp.ac.shibaura.it.ie.usecase.user.UserInterface;
 import jp.ac.shibaura.it.ie.usecase.user.update.UserUpdateRequestMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+@Component
 public class UserController implements UserInterface {
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
     private LogUtils logger;
 
+    /**
+     * @param session
+     * @param userUpdateRequestMessage
+     * @return
+     */
     @Override
     public boolean userUpdate(String session, UserUpdateRequestMessage userUpdateRequestMessage) {
         String URL = "http://localhost:8080/user/update";

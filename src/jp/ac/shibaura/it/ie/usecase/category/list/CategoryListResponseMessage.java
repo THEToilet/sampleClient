@@ -5,7 +5,7 @@ import jp.ac.shibaura.it.ie.domain.model.Category;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryResponseMessage {
+public class CategoryListResponseMessage {
     private List<Category> categoryList = new ArrayList<>();
 
     public List<Category> getCategoryList() {
