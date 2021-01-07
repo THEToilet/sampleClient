@@ -1,14 +1,11 @@
 package jp.ac.shibaura.it.ie.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.ac.shibaura.it.ie.log.LogUtils;
 import jp.ac.shibaura.it.ie.usecase.room.RoomInterface;
 import jp.ac.shibaura.it.ie.usecase.room.wait.RoomWaitResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -37,9 +34,11 @@ public class RoomController implements RoomInterface {
         } catch (HttpClientErrorException e) { // (1)
             logger.error("400系エラー発生");
             e.printStackTrace();
+            return new RoomWaitResponseMessage();
         } catch (HttpServerErrorException e) { // (2)
             logger.error("500系エラー発生");
             e.printStackTrace();
+            return new RoomWaitResponseMessage();
         }
         return responseEntity.getBody();
     }

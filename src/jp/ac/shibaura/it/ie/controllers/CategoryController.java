@@ -11,11 +11,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,9 +43,11 @@ public class CategoryController implements CategoryInterface {
         } catch (HttpClientErrorException e) {
             logger.error("400系エラー発生");
             e.printStackTrace();
+            return new ArrayList<Category>();
         } catch (HttpServerErrorException e) {
             logger.error("500系エラー発生");
             e.printStackTrace();
+            return new ArrayList<Category>();
         }
         return categoryResponse.getBody().getCategoryList();
     }
@@ -67,9 +69,11 @@ public class CategoryController implements CategoryInterface {
         } catch (HttpClientErrorException e) {
             logger.error("400系エラー発生");
             e.printStackTrace();
+            return Optional.empty();
         } catch (HttpServerErrorException e) {
             logger.error("500系エラー発生");
             e.printStackTrace();
+            return Optional.empty();
         }
         return Optional.ofNullable(categoryResponse.getBody().getRoomId());
     }

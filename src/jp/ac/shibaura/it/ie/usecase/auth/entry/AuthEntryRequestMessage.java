@@ -1,37 +1,37 @@
 package jp.ac.shibaura.it.ie.usecase.auth.entry;
 
 public class AuthEntryRequestMessage {
-    private String userId;
-    private String userName;
-    private String userPassword;
+    private String id;
+    private String name;
+    private String password;
 
-    public AuthEntryRequestMessage(String userId, String userName, String userPassword) {
-        this.userId = userId;
-        this.userName = userName;
-        this.userPassword = userPassword;
+    public AuthEntryRequestMessage(String id, String name, String password) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getId() {
+        return id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getUserPassword() {
-        return userPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

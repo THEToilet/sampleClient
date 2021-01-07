@@ -11,7 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -36,8 +35,9 @@ public class AuthController implements AuthInterface {
      */
     @Override
     public Optional<String> authLogin(AuthLoginRequestMessage authLoginRequestMessage) {
-        String URL = "http://localhost:8000/login";
+        String URL = "http://localhost:8080/login";
         String session = null;
+        logger.info(authLoginRequestMessage.getUserId() + authLoginRequestMessage.getUserPassword());
         try {
             ResponseEntity<AuthLoginResponseMessage> responseEntity = restTemplate.postForEntity(URL, authLoginRequestMessage, AuthLoginResponseMessage.class);
             logger.info(responseEntity.toString());
@@ -61,6 +61,7 @@ public class AuthController implements AuthInterface {
     @Override
     public boolean authEntry(AuthEntryRequestMessage authEntryRequestMessage) {
         String URL = "http://localhost:8080/entry";
+        logger.info("auth/entry : " + authEntryRequestMessage.getId() + authEntryRequestMessage.getName() + authEntryRequestMessage.getPassword());
         try {
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL, authEntryRequestMessage, String.class);
             logger.info(responseEntity.toString());

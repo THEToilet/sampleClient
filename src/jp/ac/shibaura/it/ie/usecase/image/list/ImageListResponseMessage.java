@@ -8,10 +8,6 @@ import java.util.List;
 public class ImageListResponseMessage {
     private List<Image> imageList = new ArrayList<>();
 
-    public ImageListResponseMessage(List<Image> imageList) {
-        this.imageList = imageList;
-    }
-
     public List<Image> getImageList() {
         return imageList;
     }

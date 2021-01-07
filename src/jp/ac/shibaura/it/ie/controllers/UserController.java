@@ -8,7 +8,6 @@ import jp.ac.shibaura.it.ie.usecase.user.update.UserUpdateRequestMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -40,7 +39,7 @@ public class UserController implements UserInterface {
         HttpEntity<String> httpEntity = new HttpEntity<String>(body, headers);
         ResponseEntity<String> userUpdateResponse = null;
         try {
-            userUpdateResponse = restTemplate.exchange(URL, HttpMethod.GET, httpEntity, String.class);
+            userUpdateResponse = restTemplate.exchange(URL, HttpMethod.POST, httpEntity, String.class);
         } catch (HttpClientErrorException e) {
             logger.error("400系エラー発生");
             e.printStackTrace();

@@ -10,7 +10,6 @@ import jp.ac.shibaura.it.ie.usecase.chat.stamp.post.ChatStampPostRequestMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -73,9 +72,11 @@ public class ChatController implements ChatInterface {
         } catch (HttpClientErrorException e) {
             logger.error("400系エラー発生");
             e.printStackTrace();
+            return new ChatMessageUpdateResponseMessage();
         } catch (HttpServerErrorException e) {
             logger.error("500系エラー発生");
             e.printStackTrace();
+            return new ChatMessageUpdateResponseMessage();
         }
         return responseEntity.getBody();
     }

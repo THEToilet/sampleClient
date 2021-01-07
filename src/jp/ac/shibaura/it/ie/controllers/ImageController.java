@@ -10,11 +10,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -42,10 +42,12 @@ public class ImageController implements ImageInterface {
         catch (HttpClientErrorException e) { // (1)
             logger.error("400系エラー発生");
             e.printStackTrace();
+            return new ArrayList<Image>();
         }
         catch (HttpServerErrorException e) { // (2)
             logger.error("500系エラー発生");
             e.printStackTrace();
+            return new ArrayList<Image>();
         }
         return imageListResponseResponseEntity.getBody().getImageList();
     }
